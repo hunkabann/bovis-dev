@@ -31,6 +31,11 @@ const routes: Routes = [
           import('./dor/dor.module').then((m) => m.DorModule),
       },
       {
+        path: 'pcs',
+        loadChildren: () =>
+          import('./pcs/pcs.module').then((m) => m.PcsModule),
+      },
+      {
         path: 'catalogos',
         loadChildren: () =>
           import('./catalogos/catalogos.module').then((m) => m.CatalogosModule),

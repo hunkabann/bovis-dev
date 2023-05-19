@@ -303,3 +303,8 @@ a.article:hover {
 .buttons-container {
   margin-bottom: 2rem;
 }
+
+.p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
+  color: var(--dark-blue, #00436C) !important;
+  border-color: var(--dark-blue) !important;
+}

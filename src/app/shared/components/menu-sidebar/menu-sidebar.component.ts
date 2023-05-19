@@ -138,33 +138,9 @@ export class MenuSidebarComponent implements OnInit {
       {
         title: 'PCS',
         icon: 'icon-pcs',
-        items: [
-          [
-            {
-              label: 'PCS',
-              items: [
-                {
-                  label: 'IP',
-                },
-                {
-                  label: 'Staffing Plan',
-                },
-                {
-                  label: 'Gastos',
-                },
-                {
-                  label: 'Ingresos',
-                },
-                {
-                  label: 'Control',
-                },
-                {
-                  label: 'PPA-KPI',
-                },
-              ],
-            },
-          ],
-        ],
+        routerLink: ['pcs/ip'],
+        command: () =>
+          this.setModule('PCS'.toUpperCase()),
       },
       {
         title: 'AUDITORIA LEGAL',
