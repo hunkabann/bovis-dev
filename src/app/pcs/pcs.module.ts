@@ -12,6 +12,8 @@ import { PpaKpiComponent } from './components/ppa-kpi/ppa-kpi.component';
 
 import { TabMenuModule } from 'primeng/tabmenu';
 import { PrimengModule } from '../shared/primeng.module';
+import { InputTextModule } from 'primeng/inputtext';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -28,7 +30,10 @@ import { PrimengModule } from '../shared/primeng.module';
     CommonModule,
     PcsRoutingModule,
     PrimengModule,
-    TabMenuModule
+    TabMenuModule,
+    FormsModule,
+    ReactiveFormsModule,
+    InputTextModule
   ]
 })
 export class PcsModule { }

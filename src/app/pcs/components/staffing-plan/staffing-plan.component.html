@@ -1,26 +1,100 @@
+
+<h1>Etapas</h1>
+
 <p>Duración del proyecto en meses: <strong>{{duracionMeses}}</strong></p>
 
-<p-table [value]="etapas" [tableStyle]="{ 'min-width': '50rem' }">
-  <ng-template pTemplate="header">
-    <tr>
-        <th>Descripción de la etapa</th>
-        <th>Meses</th>
-        <th *ngFor="let mes of meses">
-          {{mes}}
-        </th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-etapa>
+<form [formGroup]="etapaForm" (ngSubmit)="agregarEtapa()">
+  <div class="grid mb-2">
+    <div class="col">
+      <div class="flex justify-content-between gap-3 p-fluid">
+        <div class="flex-auto">
+          <input type="text" pInputText formControlName="etapa" placeholder="Escribe el nombre de la etapa..."/>
+        </div>
+        <button class="btn btn-info" type="submit">Agregar</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<div class="text-center" *ngIf="etapas.length === 0; else tablaEtapas">
+  <p>Agregue al menos una etapa para comenzar.</p>
+</div>
+
+<ng-template #tablaEtapas>
+  <p-table [value]="etapas" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
       <tr>
-          <td>{{ etapa.nombre }}</td>
-          <td>{{ etapa.totalMeses }}</td>
-          <td *ngFor="let mes of etapa.meses; index as i">
-            <p-button 
-              [icon]="mes ? 'pi pi-check' : 'pi pi-minus'" 
-              [styleClass]="mes ? 'p-button-success' : 'p-button-secondary'"
-              (onClick)="toggleOpcion(etapa, i)"
-            ></p-button>
-          </td>
+          <th>Descripción de la etapa</th>
+          <th>Meses</th>
+          <th>Borrar</th>
+          <th *ngFor="let mes of meses">
+            {{mes}}
+          </th>
       </tr>
-  </ng-template>
-</p-table>
+    </ng-template>
+    <ng-template pTemplate="body" let-etapa>
+        <tr>
+            <td>{{ etapa.nombre }}</td>
+            <td>{{ etapa.totalMeses }}</td>
+            <td>
+              <p-button icon="pi pi-trash" styleClass="p-button-rounded p-button-danger" (onClick)="borrarEtapa(etapa)"></p-button>
+            </td>
+            <td *ngFor="let mes of etapa.meses; index as i">
+              <p-button 
+                [icon]="mes ? 'pi pi-check' : 'pi pi-minus'" 
+                [styleClass]="mes ? 'p-button-success' : 'p-button-secondary'"
+                (onClick)="toggleOpcion(etapa, i)"
+              ></p-button>
+            </td>
+        </tr>
+    </ng-template>
+  </p-table>
+</ng-template>
+
+<hr>
+
+<h1>Empleados</h1>
+
+<div class="add-empleadosCampos-form" [formGroup]="form">
+  <ng-container formArrayName="empleadosCampos">
+  <p-table [tableStyle]="{ 'min-width': '50rem' }" [value]="empleadosCampos.controls">
+    <ng-template pTemplate="header">
+      <tr>
+          <th>COD</th>
+          <th>Nombre</th>
+          <th>Posición</th>
+          <th>Meses</th>
+          <th>Borrar</th>
+          <th *ngFor="let mes of meses">
+            {{mes}}
+          </th>
+      </tr>
+    </ng-template>
+        <ng-template pTemplate="body" let-empleadoForm let-i="rowIndex">
+          <tr [formGroupName]="i">
+            <td>{{empleados[i].cod}}</td>
+            <td>{{empleados[i].nombre}}</td>
+            <td>{{empleados[i].posicion}}</td>
+            <td>{{empleados[i].totalMeses}}</td>
+            <td>
+              <p-button icon="pi pi-trash" styleClass="p-button-rounded p-button-danger" (onClick)="borrarEmpleado(i)"></p-button>
+            </td>
+            <td *ngFor="let mes of meses; index as iMes">
+              <p-inputNumber
+                formControlName="{{iMes}}"
+                locale="es-MX" 
+                mode="decimal" 
+                [max]="100"
+                [maxFractionDigits]="2"
+                (onBlur)="sumarTotal(i, iMes, $event)"
+              ></p-inputNumber>
+            </td>
+          </tr>
+        </ng-template>
+    </p-table>
+  </ng-container>
+</div>
+
+<button class="btn btn-info" (click)="agregarEmpleado()">
+  Add
+</button>
