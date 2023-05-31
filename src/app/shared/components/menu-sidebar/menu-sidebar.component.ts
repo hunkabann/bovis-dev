@@ -143,13 +143,19 @@ export class MenuSidebarComponent implements OnInit {
           this.setModule('PCS'.toUpperCase()),
       },
       {
-        title: 'AUDITORIA LEGAL',
+        title: 'AUDITORIA',
         icon: 'icon-auditoria-legal',
         items: [
           [
             {
-              label: 'AUDITORIA LEGAL',
+              label: 'AUDITORIA',
               items: [
+                {
+                  label: 'Auditoría Legal',
+                },
+                {
+                  label: 'Auditoría de Calidad',
+                },
                 {
                   label: 'Seleccionar documentos del proyecto',
                 },
