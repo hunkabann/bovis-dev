@@ -65,7 +65,7 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
     interactionType: InteractionType.Redirect,
     //protectedResourceMap
     protectedResourceMap: new Map<string, Array<string> | null>([
-      ['https://bovis-dev-api.azurewebsites.net/api/*', ['api://972d807c-1677-40ed-a102-ac2303fe080d/apibovis.scope']],
+      ['https://bovis-dev-api-up.azurewebsites.net/api/*', ['api://972d807c-1677-40ed-a102-ac2303fe080d/apibovis.scope']],
     ]),
   };
 }
