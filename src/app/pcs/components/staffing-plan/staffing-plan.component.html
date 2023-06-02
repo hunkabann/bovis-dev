@@ -80,14 +80,19 @@
               <p-button icon="pi pi-trash" styleClass="p-button-rounded p-button-danger" (onClick)="borrarEmpleado(i)"></p-button>
             </td>
             <td *ngFor="let mes of meses; index as iMes">
-              <p-inputNumber
-                formControlName="{{iMes}}"
-                locale="es-MX" 
-                mode="decimal" 
-                [max]="100"
-                [maxFractionDigits]="2"
-                (onBlur)="sumarTotal(i, iMes, $event)"
-              ></p-inputNumber>
+              <span class="p-input-icon-right">
+                <i class="pi pi-percentage"></i>
+                <p-inputNumber
+                  formControlName="{{iMes}}"
+                  locale="es-MX" 
+                  mode="decimal" 
+                  [max]="100"
+                  [maxFractionDigits]="2"
+                  [maxlength]="3"
+                  (onBlur)="sumarTotal(i, iMes, $event)"
+                  class="custom-input-number"
+                ></p-inputNumber>
+              </span>
             </td>
           </tr>
         </ng-template>

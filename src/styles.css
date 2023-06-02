@@ -308,3 +308,7 @@ a.article:hover {
   color: var(--dark-blue, #00436C) !important;
   border-color: var(--dark-blue) !important;
 }
+
+.custom-input-number .p-inputnumber-input {
+  max-width: 5rem !important;
+}
