@@ -16,6 +16,11 @@ const routes: Routes = [
     path: '',
     children: [
       {
+        path: 'auditoria',
+        loadChildren: () => 
+          import('./auditoria/auditoria.module').then((m) => m.AuditoriaModule),
+      },
+      {
         path: 'empleados',
         loadChildren: () =>
           import('./empleados/empleados.module').then((m) => m.EmpleadosModule),

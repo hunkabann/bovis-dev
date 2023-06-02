@@ -152,19 +152,16 @@ export class MenuSidebarComponent implements OnInit {
               items: [
                 {
                   label: 'Auditoría Legal',
+                  routerLink: ['auditoria/auditoria-legal'],
+                  command: () =>
+                    this.setModule('Auditoría Legal'.toUpperCase()),
                 },
                 {
                   label: 'Auditoría de Calidad',
-                },
-                {
-                  label: 'Seleccionar documentos del proyecto',
-                },
-                {
-                  label: 'Carga de documentos',
-                },
-                {
-                  label: 'Seguimiento de auditoria',
-                },
+                  routerLink: ['auditoria/auditoria-calidad'],
+                  command: () =>
+                    this.setModule('Auditoría de Calidad'.toUpperCase()),
+                }
               ],
             },
           ],
