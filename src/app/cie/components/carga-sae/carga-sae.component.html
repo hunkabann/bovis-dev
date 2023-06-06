@@ -23,19 +23,33 @@
         mode="basic" 
         [customUpload]="true" 
         accept=".xlsx" 
-        (onSelect)="onBasicUpload($event)"
+        (onSelect)="onBasicUpload($event, fileUpload)"
         [multiple]="true" 
         [maxFileSize]="fileSizeMax" 
         chooseLabel="Cargar XLSX" 
-        [disabled]="!isXlsx"
+        [disabled]="isLoadingFile || !selectedOption"
       ></p-fileUpload>
     </div>
   </div>
 
+  <div *ngIf="uploaded" class="d-flex flex-column gap-2">
+    <label><b>Archivo cargado:</b> {{currentFileName}}</label>
+    <p-toolbar styleClass="p-1 mb-2">
+      <!-- <div class="p-toolbar-group-start d-flex align-items-center gap-2"> -->
+        <p-button
+          icon="pi pi-file-excel" 
+          pTooltip="Exportar Excel" 
+          styleClass="p-button-success f-2x" 
+          (click)="exportJsonToExcel()">
+        </p-button>
+      <!-- </div> -->
+    </p-toolbar>
+  </div>
+  
   <div class="grid">
     <!-- Campo de empresa -->
     <div class="col">
-      <pre for="company" style="background-color: rgb(219, 219, 219); color: rgb(164, 24, 24);">{{jsonFormateado}}</pre>
+      <!-- <pre for="company" style="background-color: rgb(219, 219, 219); color: rgb(164, 24, 24);">{{jsonFormateado}}</pre> -->
     </div>
   </div>
 
