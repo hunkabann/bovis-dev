@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { EmpleadosService } from '../../services/empleados.service';
 
 interface Requerimiento {
   profesion:    string,
@@ -34,21 +35,50 @@ export class GenerarRequerimientoComponent implements OnInit {
     experiencias: []
   }
 
-  habilidadesDisponibles: Opcion[] = [
-    {name: 'Habilidad 1', code: 'H1'},
-    {name: 'Habilidad 2', code: 'H2'},
-    {name: 'Habilidad 3', code: 'H3'}
-  ]
+  empleadosService = inject(EmpleadosService)
 
-  experienciasDisponibles: Opcion[] = [
-    {name: 'Experiencia 1', code: 'E1'},
-    {name: 'Experiencia 2', code: 'E2'},
-    {name: 'Experiencia 3', code: 'E3'}
-  ]
+  categorias:     Opcion[] = []
+  puestos:        Opcion[] = []
+  nivelEstudios:  Opcion[] = []
+  jornadas:       Opcion[] = []
+
+  habilidadesDisponibles: Opcion[] = []
+
+  experienciasDisponibles: Opcion[] = []
 
   constructor() { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    // Llenamos el select de categorías
+    this.empleadosService.getCategorias().subscribe(({data: items}) => {
+      items.map(item => this.categorias.push({name: item.descripcion, code: item.id.toString()}))
+    })
+
+    // Llenamos el select de puestos
+    this.empleadosService.getPuestos().subscribe(({data: items}) => {
+      items.map(item => this.puestos.push({name: item.descripcion, code: item.id.toString()}))
+    })
+
+    // Llenamos el select de nivel de estudios
+    this.empleadosService.getNivelEstudios().subscribe(({data: items}) => {
+      items.map(item => this.nivelEstudios.push({name: item.descripcion, code: item.id.toString()}))
+    })
+
+    // Llenamos el select de jornadas
+    this.empleadosService.getJornadas().subscribe(({data: items}) => {
+      items.map(item => this.jornadas.push({name: item.descripcion, code: item.id.toString()}))
+    })
+
+    // Llenamos el select de habilidades
+    this.empleadosService.getHabilidades().subscribe(({data: items}) => {
+      items.map(item => this.habilidadesDisponibles.push({name: item.descripcion, code: item.id.toString()}))
+    })
+
+    // Llenamos el select de experiencias
+    this.empleadosService.getExperiencias().subscribe(({data: items}) => {
+      items.map(item => this.experienciasDisponibles.push({name: item.descripcion, code: item.id.toString()}))
+    })
+  }
 
   guardar() {}
 

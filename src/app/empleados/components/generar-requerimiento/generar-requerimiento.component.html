@@ -8,7 +8,7 @@
         <label for="categoria">Categoría:</label>
         <p-dropdown 
           id="categoria" 
-          [options]="[]" 
+          [options]="categorias" 
           (onChange)="null"
           placeholder="Seleccionar una categoría" 
           optionLabel="name" 
@@ -20,7 +20,7 @@
       <label for="puesto">Puesto sugerido:</label>
       <p-dropdown 
         id="puesto" 
-        [options]="[]" 
+        [options]="puestos" 
         (onChange)="null"
         placeholder="Seleccionar un puesto" 
         optionLabel="name" 
@@ -34,7 +34,7 @@
       <label for="estudios">Nivel de estudios:</label>
       <p-dropdown 
         id="estudios" 
-        [options]="[]" 
+        [options]="nivelEstudios" 
         (onChange)="null"
         placeholder="Seleccionar un nivel" 
         optionLabel="name" 
@@ -58,7 +58,7 @@
       <label for="jornada">Jornada:</label>
       <p-dropdown 
         id="jornada" 
-        [options]="[]" 
+        [options]="jornadas" 
         (onChange)="null"
         placeholder="Seleccionar una jornada" 
         optionLabel="name" 

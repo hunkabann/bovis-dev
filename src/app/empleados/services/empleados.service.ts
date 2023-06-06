@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { CatEmpleado, CatPersona, Persona } from '../Models/empleados';
+import { CatEmpleado, CatPersona, CatalogoResponse, Persona } from '../Models/empleados';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -88,6 +88,34 @@ export class EmpleadosService {
   getEmpleados() {
     return this.http.get<any>(`${this.baseUrl}api/empleado/Consultar`);
   }
+
+  // Hecho por sebastian.flores
+
+  getCategorias() {
+    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Categoria`)
+  }
+
+  getPuestos() {
+    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Puesto`)
+  }
+
+  getNivelEstudios() {
+    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/NivelEstudios`)
+  }
+
+  getJornadas() {
+    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Jornada`)
+  }
+
+  getHabilidades() {
+    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Habilidad`)
+  }
+
+  getExperiencias() {
+    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Experiencia`)
+  }
+
+  // ./ Hecho por sebastian.flores
 
   saveEmpleado(empleado: CatEmpleado): Observable<any> {
     console.log(empleado);
