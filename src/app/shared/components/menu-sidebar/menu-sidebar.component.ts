@@ -82,9 +82,15 @@ export class MenuSidebarComponent implements OnInit {
               items: [
                 {
                   label: 'Cargar Horas',
+                  routerLink: ['timesheet/cargar-horas'],
+                  command: () =>
+                    this.setModule('Timesheet'.toUpperCase()),
                 },
                 {
                   label: 'Consultar / Modificar',
+                  routerLink: ['timesheet/consultar'],
+                  command: () =>
+                    this.setModule('Timesheet'.toUpperCase()),
                 },
               ],
             },

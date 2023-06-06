@@ -1,0 +1,64 @@
+<div class="main-container">
+  <div class="buttons-container">
+    <button type="button" class="btn btn-info" (click)="guardar()">Guardar</button>
+  </div>
+
+  <div class="grid">
+    <div class="col">
+        <label for="categoria">Empleado:</label>
+        <p-dropdown 
+          id="categoria" 
+          [options]="empleados" 
+          (onChange)="null"
+          placeholder="Seleccionar una categoría" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+        ></p-dropdown>
+    </div>
+    <div class="col">
+      <label for="puesto">Mes:</label>
+      <input 
+        id="profesion"
+        type="text" 
+        pInputText
+        class="form-control"  
+        placeholder="Escribe una profesión"
+      >
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col">
+      <label for="estudios">Usuario responsable:</label>
+      <input 
+        id="profesion"
+        type="text" 
+        pInputText
+        class="form-control"  
+        placeholder="Escribe una profesión"
+      >
+    </div>
+    <div class="col">
+      <label for="profesion">Sábados:</label>
+      <input 
+        id="profesion"
+        type="text" 
+        pInputText
+        class="form-control"  
+        placeholder="Escribe una profesión"
+      >
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col">
+      <label for="jornada">Días Trabajo / Mes:</label>
+      <input 
+        id="profesion"
+        type="text" 
+        pInputText
+        class="form-control"  
+        placeholder="Escribe una profesión"
+      >
+    </div>
+  </div>
+</div>
