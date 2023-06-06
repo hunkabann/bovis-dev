@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  urlApiBovis: 'https://bovis-api-dev-up.azurewebsites.net/',
+  urlApiBovis: 'https://bovis-dev-api-up.azurewebsites.net/',
   redirectUri: 'http://localhost:4200/',
-  clientID: 'ffd10c5b-0d31-4024-bc9c-4d9681b0b82e',
+  clientID: 'ba171311-b438-4c6a-ba16-28d9facb9e60',
   urlAuthority: 'https://login.microsoftonline.com/48986ced-d307-4c91-85be-933ccbcbaeb3'
 };
 

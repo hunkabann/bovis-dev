@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as XLSX from 'xlsx';
+import { CieService } from '../../services/cie.service';
 
 interface Options {
   name:   string,
@@ -24,7 +25,16 @@ export class CargaSaeComponent implements OnInit {
     { name: 'Empresa 2', value: 'E2' }
   ]
 
-  constructor() { }
+  constructor(private cieService: CieService) {
+    cieService.getEmpresas().subscribe(({data}) => {
+      this.companyOptions = data.map(empresa => {
+        return {
+          name: empresa.chempresa,
+          value: empresa.nukidempresa.toString()
+        }
+      })
+    })
+  }
 
   ngOnInit(): void {
   }
