@@ -10,6 +10,7 @@ export interface CatEmpleadoResponse {
 export interface Empleado {
   nunum_empleado_rr_hh:     number;
   nukidpersona:             number;
+  nombre_persona:           string;
   nukidtipo_empleado:       number;
   nukidcategoria:           number;
   nukidtipo_contrato:       number;
@@ -50,4 +51,54 @@ export interface Empleado {
   nuvalor_descuento:        number;
   nuno_empleado_noi:        number;
   chrol:                    null;
+}
+
+export interface DiasHabilesResponse {
+  data:          DiasHabiles;
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface DiasHabiles {
+  id:           number;
+  mes:          number;
+  dias:         number;
+  feriados:     number;
+  sabados:      number;
+  anio:         number;
+  dias_habiles: number;
+}
+
+export interface EmpleadoProyectoResponse {
+  data:          EmpleadoProyecto[];
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface EmpleadoProyecto {
+  nunum_proyecto:                   number;
+  chproyecto:                       string;
+  chalcance:                        string;
+  chcp:                             string;
+  chciudad:                         string;
+  nukidestatus:                     number;
+  nukidsector:                      number;
+  nukidtipo_proyecto:               number;
+  nukidresponsable_preconstruccion: number;
+  nukidresponsable_construiccion:   number;
+  nukidresponsable_ehs:             number;
+  nukidresponsable_supervisor:      number;
+  nukidcliente:                     number;
+  nukidempresa:                     number;
+  nukidpais:                        number;
+  nukiddirector_ejecutivo:          number;
+  nucosto_promedio_m2:              number;
+  dtfecha_ini:                      string;
+  dtfecha_fin:                      string;
+  nunum_empleado_rr_hh:             number;
+  nuporcantaje_participacion:       number;
+  chalias_puesto:                   string;
+  chgrupo_proyecto:                 string;
 }

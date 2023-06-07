@@ -5,6 +5,8 @@ import { TimesheetRoutingModule } from './timesheet-routing.module';
 import { CargarHorasComponent } from './views/cargar-horas/cargar-horas.component';
 import { ConsultarComponent } from './views/consultar/consultar.component';
 import { PrimengModule } from '../shared/primeng.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 
 @NgModule({
@@ -15,7 +17,9 @@ import { PrimengModule } from '../shared/primeng.module';
   imports: [
     CommonModule,
     TimesheetRoutingModule,
-    PrimengModule
+    PrimengModule,
+    ReactiveFormsModule,
+    RadioButtonModule
   ]
 })
 export class TimesheetModule { }
