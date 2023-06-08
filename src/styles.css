@@ -312,3 +312,11 @@ a.article:hover {
 .custom-input-number .p-inputnumber-input {
   max-width: 5rem !important;
 }
+
+.p-multiselect-label {
+  flex-wrap: wrap;
+}
+
+.error-msg {
+  color: var(--red-600);
+}

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { EmpleadosRoutingModule } from './empleados-routing.module';
 import { EmpleadosComponent } from './container/empleados.component';
 import { EmpleadosRegistroComponent } from './components/empleados-registro/empleados-registro.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ToastModule } from "primeng/toast";
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
@@ -32,6 +32,7 @@ import { CheckboxModule } from 'primeng/checkbox';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     EmpleadosRoutingModule,
     ConfirmPopupModule,
     ToastModule,
