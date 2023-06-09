@@ -102,3 +102,10 @@ export interface EmpleadoProyecto {
   chalias_puesto:                   string;
   chgrupo_proyecto:                 string;
 }
+
+export interface CargarHorasResponse {
+  data:          null;
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}

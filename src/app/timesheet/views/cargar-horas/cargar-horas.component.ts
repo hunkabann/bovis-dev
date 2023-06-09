@@ -4,6 +4,8 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { format } from 'date-fns';
 import { MsalService } from '@azure/msal-angular';
 import { SharedService } from 'src/app/shared/services/shared.service';
+import { errorsArray } from 'src/utils/constants';
+import { MessageService } from 'primeng/api';
 
 interface Opcion {
   name: string,
@@ -13,7 +15,8 @@ interface Opcion {
 @Component({
   selector: 'app-cargar-horas',
   templateUrl: './cargar-horas.component.html',
-  styleUrls: ['./cargar-horas.component.css']
+  styleUrls: ['./cargar-horas.component.css'],
+  providers: [MessageService]
 })
 export class CargarHorasComponent implements OnInit {
 
@@ -24,6 +27,7 @@ export class CargarHorasComponent implements OnInit {
   authService       = inject(MsalService)
   fb                = inject(FormBuilder)
   sharedService     = inject(SharedService)
+  messageService    = inject(MessageService)
 
   empleados: Opcion[] = []
 
@@ -41,33 +45,33 @@ export class CargarHorasComponent implements OnInit {
     otros:        this.fb.array([
       this.fb.group({
         id:         ['feriado'],
-        dias:       ['', Validators.required],
-        dedicacion: ['', Validators.required],
+        dias:       [0, Validators.required],
+        dedicacion: [0],
       }),
       this.fb.group({
         id:         ['vacaciones'],
-        dias:       ['', Validators.required],
-        dedicacion: ['', Validators.required],
+        dias:       [0, Validators.required],
+        dedicacion: [0],
       }),
       this.fb.group({
         id:         ['permiso'],
-        dias:       ['', Validators.required],
-        dedicacion: ['', Validators.required],
+        dias:       [0, Validators.required],
+        dedicacion: [0],
       }),
       this.fb.group({
         id:         ['incapacidad'],
-        dias:       ['', Validators.required],
-        dedicacion: ['', Validators.required],
+        dias:       [0, Validators.required],
+        dedicacion: [0],
       }),
       this.fb.group({
         id:         ['inasistencia'],
-        dias:       ['', Validators.required],
-        dedicacion: ['', Validators.required],
+        dias:       [0, Validators.required],
+        dedicacion: [0],
       }),
       this.fb.group({
         id:         ['capacitación'],
-        dias:       ['', Validators.required],
-        dedicacion: ['', Validators.required],
+        dias:       [0, Validators.required],
+        dedicacion: [0],
       })
     ])
   })
@@ -123,15 +127,6 @@ export class CargarHorasComponent implements OnInit {
     })
   }
 
-  guardar() {
-    if(!this.form.valid) {
-      this.form.markAllAsTouched()
-      return
-    }
-
-    console.log(this.form.value)
-  }
-
   buscarProyectos(event: any) {
     this.sharedService.cambiarEstado(true)
     const id = event.value.code
@@ -142,8 +137,8 @@ export class CargarHorasComponent implements OnInit {
           id:         [proyecto.nunum_proyecto],
           nombre:     [proyecto.chproyecto],
           dias:       ['', Validators.required],
-          dedicacion: ['', Validators.required],
-          costo:      ['', Validators.required]
+          dedicacion: [0],
+          costo:      [0]
         }))
       )
       this.sharedService.cambiarEstado(false)
@@ -168,20 +163,73 @@ export class CargarHorasComponent implements OnInit {
     const valor = +event
     if(seccion === 'proyectos') {
       this.proyectos.at(i).patchValue({
-        dedicacion: (valor / this.form.value.dias) * 100,
-        costo:      (valor / this.form.value.dias) * 100
+        dedicacion: Math.round((valor / this.form.value.dias) * 100),
+        costo:      Math.round((valor / this.form.value.dias) * 100)
       })
     } else {
       this.otros.at(i).patchValue({
-        dedicacion: (valor / this.form.value.dias) * 100
+        dedicacion: Math.round((valor / this.form.value.dias) * 100)
       })
     }
   }
-}
 
-// Feriado
-// Vacaciones
-// Permiso
-// Incapacidad
-// Inasistencia
-// Capacitación
+  guardar() {
+    if(!this.form.valid) {
+      this.form.markAllAsTouched()
+      return
+    }
+
+    const body = {...this.form.value, sabados: (this.form.value.sabados === 'SI'), id_responsable: 1} 
+
+    // console.log(body)
+    // return
+
+    this.sharedService.cambiarEstado(true)
+
+    this.timesheetService.cargarHoras(body)
+      .subscribe({
+        next: (data) => {
+          console.log(data)
+          // this.form.reset()
+          this.sharedService.cambiarEstado(false)
+          this.messageService.add({ severity: 'success', summary: 'Horas cargadas', detail: 'Las horas han sido cargadas.' })
+        },
+        error: (err) => {
+          this.sharedService.cambiarEstado(false)
+          this.messageService.add({ severity: 'error', summary: 'Oh no...', detail: '¡Ha ocurrido un error!' })
+        }
+      })
+  }
+
+  esInvalido(campo: string): boolean {
+    return this.form.get(campo).invalid && 
+            (this.form.get(campo).dirty || this.form.get(campo).touched)
+  }
+
+  obtenerMensajeError(campo: string): string {
+    let mensaje = ''
+
+    errorsArray.forEach((error) => {
+      if(this.form.get(campo).hasError(error.tipo))
+        mensaje = error.mensaje.toString()
+    })
+
+    return mensaje
+  }
+
+  esInvalidoEnArreglo(formArray: FormArray, campo: string, index: number): boolean {
+    return formArray.controls[index].get(campo).invalid && 
+            (formArray.controls[index].get(campo).dirty || formArray.controls[index].get(campo).touched)
+  }
+
+  obtenerMensajeErrorEnArreglo(formArray: FormArray, campo: string, index: number): string {
+    let mensaje = ''
+
+    errorsArray.forEach((error) => {
+      if(formArray.controls[index].get(campo).hasError(error.tipo))
+        mensaje = error.mensaje.toString()
+    })
+
+    return mensaje
+  }
+}

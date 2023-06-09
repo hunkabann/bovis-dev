@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 
 import { environment } from 'src/environments/environment';
-import { CatEmpleadoResponse, DiasHabilesResponse, EmpleadoProyectoResponse } from '../models/timesheet.model';
+import { CargarHorasResponse, CatEmpleadoResponse, DiasHabilesResponse, EmpleadoProyectoResponse } from '../models/timesheet.model';
 import { Observable, map, of } from 'rxjs';
 
 type sabadosOpciones = 'SI' | 'NO'
@@ -39,5 +39,9 @@ export class TimesheetService {
 
   getProyectos(empleadoId: number) {
     return this.http.get<EmpleadoProyectoResponse>(`${this.baseUrl}api/Empleado/Proyectos/${empleadoId}`)
+  }
+
+  cargarHoras(body: any) {
+    return this.http.post<CargarHorasResponse>(`${this.baseUrl}api/Timesheet/Registro/Agregar`, body)
   }
 }
