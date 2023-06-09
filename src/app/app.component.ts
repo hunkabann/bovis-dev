@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { NavigationEnd, Router } from '@angular/router';
+import { SharedService } from './shared/services/shared.service';
 
 
 @Component({
@@ -33,7 +34,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private authService: MsalService,
     private msalBroadcastService: MsalBroadcastService,
     changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
-    private router: Router
+    private router: Router,
+    public sharedService: SharedService
   ) {
 
     this.mobileQuery = media.matchMedia('(max-width: 600px)');

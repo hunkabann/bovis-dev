@@ -320,3 +320,7 @@ a.article:hover {
 .error-msg {
   color: var(--red-600);
 }
+
+.p-megamenu-panel {
+z-index: 99 !important;
+}

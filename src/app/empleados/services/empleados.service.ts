@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { CatEmpleado, CatPersona, CatalogoResponse, Persona } from '../Models/empleados';
+import { CatEmpleado, CatPersona, CatalogoResponse, Persona, GenerarRequerimientoResponse } from '../Models/empleados';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -113,6 +113,10 @@ export class EmpleadosService {
 
   getExperiencias() {
     return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Experiencia`)
+  }
+
+  generarRequerimiento(body: any) {
+    return this.http.post<GenerarRequerimientoResponse>(`${this.baseUrl}api/Requerimiento/Registro/Agregar`, body)
   }
 
   // ./ Hecho por sebastian.flores

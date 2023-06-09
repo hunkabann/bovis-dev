@@ -125,3 +125,10 @@ export interface CatItem {
   descripcion: string;
   activo:      boolean;
 }
+
+export interface GenerarRequerimientoResponse {
+  data:          null;
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}

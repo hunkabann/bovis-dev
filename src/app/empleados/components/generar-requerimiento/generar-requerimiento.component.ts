@@ -2,6 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { EmpleadosService } from '../../services/empleados.service';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { errorsArray } from 'src/utils/constants';
+import { SharedService } from 'src/app/shared/services/shared.service';
+import { MessageService } from 'primeng/api';
 
 interface Requerimiento {
   profesion:    string,
@@ -23,12 +25,15 @@ interface Opcion {
 @Component({
   selector: 'app-generar-requerimiento',
   templateUrl: './generar-requerimiento.component.html',
-  styleUrls: ['./generar-requerimiento.component.css']
+  styleUrls: ['./generar-requerimiento.component.css'],
+  providers: [MessageService]
 })
 export class GenerarRequerimientoComponent implements OnInit {
   
   empleadosService = inject(EmpleadosService)
   fb = inject(FormBuilder)
+  sharedService = inject(SharedService)
+  messageService = inject(MessageService)
 
   form = this.fb.group({
     categoria:      ['', [Validators.required]],
@@ -53,6 +58,9 @@ export class GenerarRequerimientoComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+
+    this.sharedService.cambiarEstado(true)
+
     // Llenamos el select de categorías
     this.empleadosService.getCategorias().subscribe(({data: items}) => {
       items.map(item => this.categorias.push({name: item.descripcion, code: item.id.toString()}))
@@ -81,6 +89,7 @@ export class GenerarRequerimientoComponent implements OnInit {
     // Llenamos el select de experiencias
     this.empleadosService.getExperiencias().subscribe(({data: items}) => {
       items.map(item => this.experiencias.push({name: item.descripcion, code: item.id.toString()}))
+      this.sharedService.cambiarEstado(false)
     })
   }
 
@@ -90,7 +99,21 @@ export class GenerarRequerimientoComponent implements OnInit {
       return
     }
 
-    console.log(this.form.value)
+    this.sharedService.cambiarEstado(true)
+
+    this.empleadosService.generarRequerimiento(this.form.value)
+      .subscribe({
+        next: (data) => {
+          console.log(data)
+          this.form.reset()
+          this.sharedService.cambiarEstado(false)
+          this.messageService.add({ severity: 'success', summary: 'Requerimiento generado', detail: 'El requerimiento ha sido generado' })
+        },
+        error: (err) => {
+          this.sharedService.cambiarEstado(false)
+          this.messageService.add({ severity: 'error', summary: 'Oh no...', detail: '¡Ha ocurrido un error!' })
+        }
+      })
   }
 
   esInvalido(campo: string): boolean {

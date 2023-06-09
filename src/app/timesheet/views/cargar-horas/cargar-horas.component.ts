@@ -3,7 +3,7 @@ import { TimesheetService } from '../../services/timesheet.service';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { format } from 'date-fns';
 import { MsalService } from '@azure/msal-angular';
-import { Message } from 'primeng/api';
+import { SharedService } from 'src/app/shared/services/shared.service';
 
 interface Opcion {
   name: string,
@@ -18,10 +18,12 @@ interface Opcion {
 export class CargarHorasComponent implements OnInit {
 
   errorMessage: string = ''
+  cargando: boolean = true
 
   timesheetService  = inject(TimesheetService)
   authService       = inject(MsalService)
   fb                = inject(FormBuilder)
+  sharedService     = inject(SharedService)
 
   empleados: Opcion[] = []
 
@@ -103,6 +105,9 @@ export class CargarHorasComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
+    this.sharedService.cambiarEstado(true)
+
     this.timesheetService.getEmpleados().subscribe(({data: items}) => {
       items.map(item => this.empleados.push({name: item.nombre_persona, code: item.nunum_empleado_rr_hh.toString()}))
     })
@@ -114,6 +119,7 @@ export class CargarHorasComponent implements OnInit {
     ).subscribe(({habiles, feriados}) => {
       this.form.patchValue({dias: habiles})
       this.otros.at(0).patchValue({dias: feriados})
+      this.sharedService.cambiarEstado(false)
     })
   }
 
@@ -127,6 +133,7 @@ export class CargarHorasComponent implements OnInit {
   }
 
   buscarProyectos(event: any) {
+    this.sharedService.cambiarEstado(true)
     const id = event.value.code
     this.timesheetService.getProyectos(id).subscribe(({data}) => {
       this.proyectos.clear()
@@ -139,10 +146,13 @@ export class CargarHorasComponent implements OnInit {
           costo:      ['', Validators.required]
         }))
       )
+      this.sharedService.cambiarEstado(false)
     })
   }
 
   calcularDias(event: any) {
+    this.sharedService.cambiarEstado(true)
+    
     this.timesheetService.getDiasHabiles(
       +this.form.value.mes, 
       +this.form.value.anio, 
@@ -150,6 +160,7 @@ export class CargarHorasComponent implements OnInit {
     ).subscribe(({habiles, feriados}) => {
       this.form.patchValue({dias: habiles})
       this.otros.at(0).patchValue({dias: feriados})
+      this.sharedService.cambiarEstado(false)
     })
   }
 

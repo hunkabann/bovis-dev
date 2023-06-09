@@ -20,7 +20,7 @@ export class MenuSidebarComponent implements OnInit {
     if (value) {
       this._accesos = value;
       this.rol = value[0].split('.')[0];
-      console.log(this.rol);
+      // console.log(this.rol);
     }
   }
 
@@ -323,14 +323,14 @@ export class MenuSidebarComponent implements OnInit {
 
     //CATALOGOS
     if(this.rol == 'nom' || this.rol == 'rh' || this.rol == 'it' || this.rol == 'eje' || this.rol == 'dev'){
-      this.perfilesMenu.push(this.menu[9]);
+      this.perfilesMenu.push(this.menu[10]);
     }
 
   }
 
 
   setModule(name: any) {
-    console.log(name);
+    // console.log(name);
     this.nameModule.next(name);
   }
 }
