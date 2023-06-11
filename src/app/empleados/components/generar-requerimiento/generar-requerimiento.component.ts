@@ -1,16 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { EmpleadosService } from '../../services/empleados.service';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { errorsArray } from 'src/utils/constants';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { MessageService } from 'primeng/api';
-
-interface Requerimiento {
-  profesion:    string,
-  sueldo:       RangoSueldo,
-  habilidades:  string[],
-  experiencias: string[]
-}
+import { finalize, forkJoin, map as mapRxjs, map } from 'rxjs';
 
 interface RangoSueldo {
   min: number,
@@ -54,6 +48,7 @@ export class GenerarRequerimientoComponent implements OnInit {
   jornadas:       Opcion[] = []
   habilidades:    Opcion[] = []
   experiencias:   Opcion[] = []
+  profesiones:    Opcion[] = []
 
   constructor() { }
 
@@ -61,35 +56,28 @@ export class GenerarRequerimientoComponent implements OnInit {
 
     this.sharedService.cambiarEstado(true)
 
-    // Llenamos el select de categorías
-    this.empleadosService.getCategorias().subscribe(({data: items}) => {
-      items.map(item => this.categorias.push({name: item.descripcion, code: item.id.toString()}))
-    })
-
-    // Llenamos el select de puestos
-    this.empleadosService.getPuestos().subscribe(({data: items}) => {
-      items.map(item => this.puestos.push({name: item.descripcion, code: item.id.toString()}))
-    })
-
-    // Llenamos el select de nivel de estudios
-    this.empleadosService.getNivelEstudios().subscribe(({data: items}) => {
-      items.map(item => this.nivelEstudios.push({name: item.descripcion, code: item.id.toString()}))
-    })
-
-    // Llenamos el select de jornadas
-    this.empleadosService.getJornadas().subscribe(({data: items}) => {
-      items.map(item => this.jornadas.push({name: item.descripcion, code: item.id.toString()}))
-    })
-
-    // Llenamos el select de habilidades
-    this.empleadosService.getHabilidades().subscribe(({data: items}) => {
-      items.map(item => this.habilidades.push({name: item.descripcion, code: item.id.toString()}))
-    })
-
-    // Llenamos el select de experiencias
-    this.empleadosService.getExperiencias().subscribe(({data: items}) => {
-      items.map(item => this.experiencias.push({name: item.descripcion, code: item.id.toString()}))
-      this.sharedService.cambiarEstado(false)
+    forkJoin([
+      this.empleadosService.getCategorias(),
+      this.empleadosService.getPuestos(),
+      this.empleadosService.getNivelEstudios(),
+      this.empleadosService.getJornadas(),
+      this.empleadosService.getHabilidades(),
+      this.empleadosService.getExperiencias(),
+      this.empleadosService.getProfesiones()
+    ])
+    .pipe(
+      finalize(() => {
+        this.sharedService.cambiarEstado(false)
+      })
+    )
+    .subscribe(([categoriasR, puestosR, nivelesR, jornadasR, habilidadesR, experienciasR, profesionesR]) => {
+      this.categorias = categoriasR.data.map(categoria => ({name: categoria.descripcion, code: categoria.id.toString()}))
+      this.puestos = puestosR.data.map(puesto => ({name: puesto.descripcion, code: puesto.id.toString()}))
+      this.nivelEstudios = nivelesR.data.map(nivel => ({name: nivel.descripcion, code: nivel.id.toString()}))
+      this.jornadas = jornadasR.data.map(jornada => ({name: jornada.descripcion, code: jornada.id.toString()}))
+      this.habilidades = habilidadesR.data.map(habilidad => ({name: habilidad.descripcion, code: habilidad.id.toString()}))
+      this.experiencias = experienciasR.data.map(experiencia => ({name: experiencia.descripcion, code: experiencia.id.toString()}))
+      this.profesiones = profesionesR.data.map(profesion => ({name: profesion.descripcion, code: profesion.id.toString()}))
     })
   }
 

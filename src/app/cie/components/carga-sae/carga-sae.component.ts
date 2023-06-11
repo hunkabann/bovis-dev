@@ -1,6 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { CieService } from '../../services/cie.service';
+import { MessageService } from 'primeng/api';
+import { SharedService } from 'src/app/shared/services/shared.service';
+import { CieElementPost } from '../../models/cie.models';
+import { cieHeaders } from 'src/utils/constants';
+import { finalize } from 'rxjs';
 
 interface Option {
   name:   string,
@@ -12,16 +17,20 @@ const EXCEL_EXTENSION = '.xlsx';
 @Component({
   selector: 'app-carga-sae',
   templateUrl: './carga-sae.component.html',
-  styleUrls: ['./carga-sae.component.css']
+  styleUrls: ['./carga-sae.component.css'],
+  providers: [MessageService]
 })
 export class CargaSaeComponent implements OnInit {
 
-  cieService = inject(CieService)
+  cieService      = inject(CieService)
+  messageService  = inject(MessageService)
+  sharedService   = inject(SharedService)
 
-  excelData: any
-  jsonData: any = []
+  excelData:        any
+  jsonData:         CieElementPost[] = []
+  cieHeadersLocal:  string[] = cieHeaders
 
-  fileSizeMax: number = 1000000
+  fileSizeMax: number = 10000000
   isLoadingFile = false
   companyOptions: Option[] = []
   selectedOption: Option
@@ -31,6 +40,9 @@ export class CargaSaeComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+
+    this.sharedService.cambiarEstado(true)
+
     this.cieService.getEmpresas().subscribe(({data}) => {
       this.companyOptions = data.map(empresa => {
         return {
@@ -38,6 +50,8 @@ export class CargaSaeComponent implements OnInit {
           value: empresa.nukidempresa.toString()
         }
       })
+
+      this.sharedService.cambiarEstado(false)
     })
   }
 
@@ -48,6 +62,9 @@ export class CargaSaeComponent implements OnInit {
   async onBasicUpload(event: any, fileUpload: any) {
     this.isLoadingFile = true
     this.uploaded = false
+    this.jsonData = []
+
+    this.sharedService.cambiarEstado(true)
     
     const [ file ] = event.files
     const fileReader = new FileReader()
@@ -63,6 +80,7 @@ export class CargaSaeComponent implements OnInit {
       let lastRecord = false
       let isMiddleDash = false
       let cuentaActual = ''
+      // console.log(this.excelData)
       this.excelData.map((record: any, i: number, row: any[]) => {
         lastRecord = (i + 1) === row.length
         isMiddleDash = record.Tipo === '-'
@@ -72,80 +90,48 @@ export class CargaSaeComponent implements OnInit {
           if(record.Concepto)
             tempNormalRecords.push({
               // ...record, 
-              NombreCuenta: cuentaActual,
-              Cuenta:       cuentaActual.split(' ')[2],
-              TipoPoliza:   record.__EMPTY,
-              Numero:       +record.Numero,
-              Fecha:        record.Fecha,
-              Mes:          record.Fecha.split('/')[1],
-              Concepto:     record.Concepto,
-              CentroCostos: record['Centro de costos'].trim(),
-              Proyectos:    record.Proyectos,
-              SaldoInicial: record['Saldo inicial'],
-              Debe:         record.Debe,
-              Haber:        record.Haber,
-              Movimiento:   record.Debe - record.Haber,
-              Empresa:      this.selectedOption.name,
-              NumProyecto:  '-',
-              TipoP:	      '-',
-              EdoDeResultados: '-',
-              Responsable:  '-',
-              Tipo:         '-',
-              TipoPY:       '-',
-              ClasificacionPY:  '-'
+              nombre_cuenta:      cuentaActual,
+              cuenta:             cuentaActual.split(' ')[2],
+              tipo_poliza:        record.__EMPTY,
+              numero:             +record.Numero,
+              fecha:              record.Fecha,
+              mes:                record.Fecha.split('/')[1],
+              concepto:           record.Concepto,
+              centro_costos:      record['Centro de costos']?.trim(),
+              proyectos:          record.Proyectos,
+              saldo_inicial:      record['Saldo inicial'],
+              debe:               record.Debe,
+              haber:              record.Haber,
+              movimiento:         record.Debe - record.Haber,
+              empresa:            this.selectedOption.name.trim(),
+              num_proyecto:       record['Centro de costos'] ? +record['Centro de costos'].split('.')[0] : 0,
+              tipo_num_proyecto:  '-',
+              edo_resultados:     '-',
+              responsable:        '-',
+              tipo_responsable:   '-',
+              tipo_py:            '-',
+              clasificacion_py:   '-'
             })
         }
       })
       this.jsonData = tempNormalRecords
     }
-    // fileReader.onload = e => {
-    //   const workBook = XLSX.read( fileReader.result, { type: 'binary' } )
-    //   const [sheetName] = workBook.SheetNames
-    //   this.excelData = XLSX.utils.sheet_to_json( workBook.Sheets[sheetName] )
-    //   let counter = 0
-    //   let records: any [] = []
-    //   let tempRecords: any [] = []
-    //   let tempNormalRecords: any[] = []
-    //   let lastRecord = false
-    //   let isMiddleDash = false
-    //   this.excelData.map((record: any, i: number, row: any[]) => {
-    //     lastRecord = (i + 1) === row.length
-    //     isMiddleDash = record.Tipo === '-'
-    //     if(isMiddleDash || lastRecord) {
-    //       if(i > 0) {
-    //         records[counter - 1] = {
-    //           Cuenta:   tempRecords[counter - 1].__EMPTY,
-    //           datos:    tempNormalRecords.slice(0, tempNormalRecords.length - 1),
-    //           balance:  tempNormalRecords[tempNormalRecords.length - 1]
-    //         }
-    //         tempNormalRecords = []
-    //       }
-    //       if(!lastRecord)
-    //         tempRecords[counter++] = record
-    //       else
-    //         this.jsonData = {balance: record}
-    //     } else {
-    //       tempNormalRecords.push(record)
-    //     }
-    //   })
-    //   this.jsonData = {...this.jsonData, datos: records}
-    //   console.log(this.jsonData)
-    // }
 
     this.isLoadingFile = false
     this.uploaded = true
+
+    this.sharedService.cambiarEstado(false)
     
     fileUpload.clear();
   }
 
   onChangeCompany(event: any) {
     this.selectedOption = event.value
+
+    this.uploaded = false
   }
 
-  public exportJsonToExcel(fileName: string = 'CIE'): void {
-    // inserting first blank row
-    // this.jsonData = [{'x': 1, 'y': 2, 'z': 3}, {'x': 1, 'y': 2, 'z': 3}]
-    let Heading = [['FirstName', 'Last Name', 'Email']];
+  exportJsonToExcel(fileName: string = 'CIE'): void {
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet( [] );
 
     const workbook: XLSX.WorkBook = {
@@ -155,33 +141,30 @@ export class CargaSaeComponent implements OnInit {
       SheetNames: ['Detalle'],
     };
 
-    const headings = [[
-      'NOMBRE CUENTA',
-      'CUENTA',
-      'TIPO POLIZA',
-      'NUMERO',
-      'FECHA',
-      'MES',
-      'CONCEPTO',
-      'CENTRO DE COSTOS',
-      'PROYECTOS',
-      'SALDO INICIAL',
-      'DEBE',
-      'HABER',
-      'MOVIMIENTO',
-      'EMPRESA',
-      'NUM PROYECTO',
-      'TIPO',
-      'EDO DE RESULTADOS',
-      'RESPONSABLE',
-      'TIPO',
-      'TIPO PY',
-      'CLASIFICACION PY'
-    ]]
     XLSX.utils.sheet_add_json(worksheet, this.jsonData, { origin: 'A2', skipHeader: true })
-    XLSX.utils.sheet_add_aoa(worksheet, headings);
+    XLSX.utils.sheet_add_aoa(worksheet, [this.cieHeadersLocal]);
+
     // save to file
     XLSX.writeFile(workbook, `${fileName + '_' + Date.now()}${EXCEL_EXTENSION}`);
+  }
+
+  cargar() {
+    this.sharedService.cambiarEstado(true)
+    // console.log(this.jsonData)
+    this.cieService.cargarSae(this.jsonData)
+      .pipe(
+        finalize(() => {
+          this.sharedService.cambiarEstado(false)
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          this.messageService.add({severity: 'success', summary: 'SAE cargado', detail: 'El SAE ha sido cargado.'})
+        },
+        error: (err) => {
+          this.messageService.add({severity: 'error', summary: 'Oh no...', detail: err.error})
+        }
+      })
   }
 
 }

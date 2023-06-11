@@ -78,14 +78,18 @@
       </div>
       <div class="col">
         <label for="profesion">Profesión:</label>
-        <input 
-          id="profesion"
-          type="text" 
-          pInputText
-          placeholder="Escribe una profesión"
+        <p-dropdown 
+          id="profesion" 
+          [options]="profesiones" 
+          (onChange)="null"
+          placeholder="Seleccionar una profesión"
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('profesion')}"
           formControlName="profesion"
-          [ngClass]="{'form-control': true, 'ng-invalid ng-dirty': esInvalido('profesion')}"
-        >
+          optionValue="code"
+        ></p-dropdown>
         <div *ngIf="esInvalido('profesion')">
           <small
             class="error-msg"

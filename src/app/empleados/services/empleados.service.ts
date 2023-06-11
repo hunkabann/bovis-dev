@@ -92,27 +92,31 @@ export class EmpleadosService {
   // Hecho por sebastian.flores
 
   getCategorias() {
-    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Categoria`)
+    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Categoria/true`)
   }
 
   getPuestos() {
-    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Puesto`)
+    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Puesto/true`)
   }
 
   getNivelEstudios() {
-    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/NivelEstudios`)
+    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/NivelEstudios/true`)
   }
 
   getJornadas() {
-    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Jornada`)
+    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Jornada/true`)
   }
 
   getHabilidades() {
-    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Habilidad`)
+    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Habilidad/true`)
   }
 
   getExperiencias() {
-    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Experiencia`)
+    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Experiencia/true`)
+  }
+
+  getProfesiones() {
+    return this.http.get<CatalogoResponse>(`${this.baseUrl}api/Catalogo/Profesion/true`)
   }
 
   generarRequerimiento(body: any) {

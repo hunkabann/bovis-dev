@@ -1,11 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-
-import { environment } from 'src/environments/environment';
-import { CargarHorasResponse, CatEmpleadoResponse, DiasHabilesResponse, EmpleadoProyectoResponse } from '../models/timesheet.model';
 import { Observable, map, of } from 'rxjs';
 
-type sabadosOpciones = 'SI' | 'NO'
+import { environment } from 'src/environments/environment';
+import { CargarHorasResponse, CatEmpleadoResponse, DiasHabilesResponse, EmpleadoInfoResponse, EmpleadoProyectoResponse, SabadosOpciones } from '../models/timesheet.model';
 
 interface Dias {
   habiles:  number,
@@ -27,7 +25,7 @@ export class TimesheetService {
     return this.http.get<CatEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true`)
   }
 
-  getDiasHabiles(mes: number, anio: number, sabados: sabadosOpciones): Observable<Dias> {
+  getDiasHabiles(mes: number, anio: number, sabados: SabadosOpciones): Observable<Dias> {
     return this.http.get<DiasHabilesResponse>(`${this.baseUrl}api/Timesheet/DiasHabiles/${mes}/${anio}/${sabados === 'SI' ? 'true' : 'false'}`)
       .pipe(map(pre_info => pre_info.data))
       .pipe(map(info => {
@@ -39,6 +37,10 @@ export class TimesheetService {
 
   getProyectos(empleadoId: number) {
     return this.http.get<EmpleadoProyectoResponse>(`${this.baseUrl}api/Empleado/Proyectos/${empleadoId}`)
+  }
+
+  getEmpleadoInfo(correo: string) {
+    return this.http.get<EmpleadoInfoResponse>(`${this.baseUrl}api/Empleado/Registro/Email/${correo}`)
   }
 
   cargarHoras(body: any) {

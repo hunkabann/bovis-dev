@@ -7,6 +7,7 @@ import { CargaSaeComponent } from './components/carga-sae/carga-sae.component';
 import { ResultadoBusquedaComponent } from './components/resultado-busqueda/resultado-busqueda.component';
 import { FormsModule } from '@angular/forms';
 import { PrimengModule } from '../shared/primeng.module';
+import { ToastModule } from 'primeng/toast';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { PrimengModule } from '../shared/primeng.module';
     CommonModule,
     CieRoutingModule,
     FormsModule,
-    PrimengModule
+    PrimengModule,
+    ToastModule
   ]
 })
 export class CieModule { }

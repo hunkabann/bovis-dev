@@ -33,7 +33,7 @@ body {
 }
 
 .content {
-  overflow: auto;
+  overflow-x: hidden;
 }
 
 .menu-principal {

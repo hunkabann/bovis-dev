@@ -1,11 +1,15 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { TimesheetService } from '../../services/timesheet.service';
+import { MessageService } from 'primeng/api';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
-import { format } from 'date-fns';
 import { MsalService } from '@azure/msal-angular';
+import { finalize, forkJoin } from 'rxjs';
+import { format } from 'date-fns';
+
+import { TimesheetService } from '../../services/timesheet.service';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { errorsArray } from 'src/utils/constants';
-import { MessageService } from 'primeng/api';
+import { SabadosOpciones } from '../../models/timesheet.model';
+import { Router } from '@angular/router';
 
 interface Opcion {
   name: string,
@@ -28,21 +32,23 @@ export class CargarHorasComponent implements OnInit {
   fb                = inject(FormBuilder)
   sharedService     = inject(SharedService)
   messageService    = inject(MessageService)
+  router            = inject(Router)
 
   empleados: Opcion[] = []
 
   diasHabiles: number = 0
 
   form = this.fb.group({
-    empleado:     ['', [Validators.required]],
-    fecha:        [format(Date.now(), 'M/Y')],
-    mes:          [format(Date.now(), 'M')],
-    anio:         [format(Date.now(), 'Y')],
-    responsable:  [localStorage.getItem('userMail')],
-    dias:         [this.diasHabiles, [Validators.min(1)]],
-    sabados:      ['NO'],
-    proyectos:    this.fb.array([]),
-    otros:        this.fb.array([
+    empleado:       ['', [Validators.required]],
+    fecha:          [format(Date.now(), 'M/Y')],
+    mes:            [format(Date.now(), 'M')],
+    anio:           [format(Date.now(), 'Y')],
+    responsable:    ['', Validators.required],
+    id_responsable: [0],
+    dias:           [this.diasHabiles, [Validators.min(1)]],
+    sabados:        ['NO'],
+    proyectos:      this.fb.array([]),
+    otros:          this.fb.array([
       this.fb.group({
         id:         ['feriado'],
         dias:       [0, Validators.required],
@@ -108,22 +114,41 @@ export class CargarHorasComponent implements OnInit {
     return (totalProyectos + totalOtros)
   }
 
+  get sumaOtros() {
+    let total = 0
+    this.otros.controls.forEach(control => {
+      total += Number(control.get('dias').value)
+    })
+    return total
+  }
+
   ngOnInit(): void {
     
     this.sharedService.cambiarEstado(true)
 
-    this.timesheetService.getEmpleados().subscribe(({data: items}) => {
-      items.map(item => this.empleados.push({name: item.nombre_persona, code: item.nunum_empleado_rr_hh.toString()}))
-    })
+    forkJoin(([
+      this.timesheetService.getEmpleadoInfo(localStorage.getItem('userMail') || ''),
+      this.timesheetService.getEmpleados(),
+      this.timesheetService.getDiasHabiles(+this.form.value.mes, +this.form.value.anio, this.form.value.sabados as SabadosOpciones)
+    ]))
+    .pipe(
+      finalize(() => {
+        this.sharedService.cambiarEstado(false)
+      })
+    )
+    .subscribe(([empleadoR, empleadosR, diasR]) => {
+      if(!empleadoR.success) {
+        this.messageService.add({ severity: 'error', summary: 'Oh no...', detail: '¡No pudimos encontrar información del usuario responsable!' })
+      } else {
+        const {nukid_empleado, chnombre, chap_paterno} = empleadoR.data
+        this.form.patchValue({responsable: `${chnombre} ${chap_paterno}`})
+        this.form.patchValue({id_responsable: nukid_empleado})
+      }
 
-    this.timesheetService.getDiasHabiles(
-      +this.form.value.mes, 
-      +this.form.value.anio, 
-      this.form.value.sabados as any
-    ).subscribe(({habiles, feriados}) => {
-      this.form.patchValue({dias: habiles})
-      this.otros.at(0).patchValue({dias: feriados})
-      this.sharedService.cambiarEstado(false)
+      this.empleados = empleadosR.data.map(empleado => ({name: empleado.nombre_persona, code: empleado.nunum_empleado_rr_hh.toString()}))
+
+      this.form.patchValue({dias: diasR.habiles})
+      this.otros.at(0).patchValue({dias: diasR.feriados})
     })
   }
 
@@ -163,12 +188,18 @@ export class CargarHorasComponent implements OnInit {
     const valor = +event
     if(seccion === 'proyectos') {
       this.proyectos.at(i).patchValue({
-        dedicacion: Math.round((valor / this.form.value.dias) * 100),
-        costo:      Math.round((valor / this.form.value.dias) * 100)
+        dedicacion: Math.round( (valor / this.form.value.dias) * 100 ),
+        costo:      Math.round( (valor / (this.form.value.dias - this.sumaOtros)) * 100 )
       })
     } else {
       this.otros.at(i).patchValue({
-        dedicacion: Math.round((valor / this.form.value.dias) * 100)
+        dedicacion: Math.round( (valor / this.form.value.dias) * 100 )
+      })
+      this.proyectos.controls.forEach(proyecto => {
+        const costo = Math.round( ( Number(proyecto.get('dias').value) / (this.form.value.dias - this.sumaOtros) ) * 100 )
+        proyecto.patchValue({
+          costo
+        })
       })
     }
   }
@@ -179,7 +210,7 @@ export class CargarHorasComponent implements OnInit {
       return
     }
 
-    const body = {...this.form.value, sabados: (this.form.value.sabados === 'SI'), id_responsable: 1} 
+    const body = {...this.form.value, sabados: (this.form.value.sabados === 'SI')} 
 
     // console.log(body)
     // return
@@ -189,14 +220,13 @@ export class CargarHorasComponent implements OnInit {
     this.timesheetService.cargarHoras(body)
       .subscribe({
         next: (data) => {
-          console.log(data)
           // this.form.reset()
           this.sharedService.cambiarEstado(false)
-          this.messageService.add({ severity: 'success', summary: 'Horas cargadas', detail: 'Las horas han sido cargadas.' })
+          this.router.navigate(['/timesheet/consultar'], {queryParams: {success: true}});
         },
         error: (err) => {
           this.sharedService.cambiarEstado(false)
-          this.messageService.add({ severity: 'error', summary: 'Oh no...', detail: '¡Ha ocurrido un error!' })
+          this.messageService.add({ severity: 'error', summary: 'Oh no...', detail: err.error || '¡Ha ocurrido un error!' })
         }
       })
   }

@@ -22,7 +22,10 @@ const routes: Routes = [
   { path: 'cat_sector', component: CatalogosGeneralesComponent },
   { path: 'cat_cie', component: CatalogosGeneralesComponent },
   { path: 'cat_tipo_cuenta', component: CatalogosGeneralesComponent },
-  { path: 'cat_tipo_documento', component: CatalogosGeneralesComponent }
+  { path: 'cat_tipo_documento', component: CatalogosGeneralesComponent },
+  { path: 'cat_habilidad', component: CatalogosGeneralesComponent },
+  { path: 'cat_experiencia', component: CatalogosGeneralesComponent },
+  { path: 'cat_profesion', component: CatalogosGeneralesComponent }
 ];
 
 @NgModule({

@@ -109,3 +109,19 @@ export interface CargarHorasResponse {
   message:       null;
   transactionId: null;
 }
+
+export interface EmpleadoInfoResponse {
+  data:          EmpleadoResumido;
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface EmpleadoResumido {
+  nukid_empleado: number;
+  chnombre:       string;
+  chap_paterno:   string;
+  chap_materno:   string;
+}
+
+export type SabadosOpciones = 'SI' | 'NO'
