@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, map, of } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { CargarHorasResponse, CatEmpleadoResponse, DiasHabilesResponse, EmpleadoInfoResponse, EmpleadoProyectoResponse, SabadosOpciones } from '../models/timesheet.model';
+import { CargarHorasResponse, CatEmpleadoResponse, DiasHabilesResponse, EmpleadoInfoResponse, EmpleadoProyectoResponse, SabadosOpciones, TimesheetsPorEmpleadoResponse } from '../models/timesheet.model';
 
 interface Dias {
   habiles:  number,
@@ -45,5 +45,9 @@ export class TimesheetService {
 
   cargarHoras(body: any) {
     return this.http.post<CargarHorasResponse>(`${this.baseUrl}api/Timesheet/Registro/Agregar`, body)
+  }
+
+  getTimeSheetsPorEmpleado(empleadoId: number) {
+    return this.http.get<TimesheetsPorEmpleadoResponse>(`${this.baseUrl}api/Timesheet/TimeSheets/Empleado/${empleadoId}`)
   }
 }

@@ -10,11 +10,7 @@ import { SharedService } from 'src/app/shared/services/shared.service';
 import { errorsArray } from 'src/utils/constants';
 import { SabadosOpciones } from '../../models/timesheet.model';
 import { Router } from '@angular/router';
-
-interface Opcion {
-  name: string,
-  code: string
-}
+import { Opcion } from 'src/models/general.model';
 
 @Component({
   selector: 'app-cargar-horas',

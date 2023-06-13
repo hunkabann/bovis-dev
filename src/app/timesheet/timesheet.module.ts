@@ -7,12 +7,14 @@ import { ConsultarComponent } from './views/consultar/consultar.component';
 import { PrimengModule } from '../shared/primeng.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { ProyectoJoinPipe } from './pipes/proyecto-join.pipe';
 
 
 @NgModule({
   declarations: [
     CargarHorasComponent,
-    ConsultarComponent
+    ConsultarComponent,
+    ProyectoJoinPipe
   ],
   imports: [
     CommonModule,

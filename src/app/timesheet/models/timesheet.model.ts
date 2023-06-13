@@ -125,3 +125,44 @@ export interface EmpleadoResumido {
 }
 
 export type SabadosOpciones = 'SI' | 'NO'
+
+export interface TimesheetsPorEmpleadoResponse {
+  data:          Timesheet[];
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface Timesheet {
+  id:             number;
+  id_empleado:    number;
+  mes:            number;
+  anio:           number;
+  id_responsable: number;
+  sabados:        boolean;
+  dias_trabajo:   number;
+  otros:          Otro[];
+  proyectos:      Proyecto[];
+}
+
+export interface Otro {
+  idTimesheet_Otro: number;
+  idTimeSheet:      number;
+  descripcion:      otroOpciones;
+  dias:             number;
+  tDedicacion:      number;
+  activo:           boolean;
+}
+
+export interface Proyecto {
+  idTimesheet_Proyecto: number;
+  idTimesheet:          number;
+  idProyecto:           number;
+  descripcion:          string;
+  dias:                 number;
+  tDedicacion:          number;
+  costo:                number;
+  activo:               boolean;
+}
+
+export type otroOpciones = 'feriado' | 'vacaciones' | 'permiso' | 'incapacidad' | 'inasistencia' | 'capacitación'

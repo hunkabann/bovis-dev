@@ -2,5 +2,54 @@
 <p-toast></p-toast>
 
 <div class="main-container">
-  <p>consultar works!</p>
+  <div class="grid">
+    <div class="col">
+        <label for="empleado">Empleado:</label>
+        <p-dropdown 
+          id="empleado" 
+          [options]="empleados"
+          placeholder="Seleccionar una empleado" 
+          optionLabel="name"
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          (onChange)="buscarRegistros($event)"
+        ></p-dropdown>
+    </div>
+  </div>
+
+  <p-table 
+    [value]="timesheets" 
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [paginator]="true"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [rows]="10"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Mes</th>
+        <th>Año</th>
+        <th>Proyectos</th>
+        <th>Opciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-ts>
+      <tr>
+        <td>{{ts.mes}}</td>
+        <td>{{ts.anio}}</td>
+        <td>{{ts.proyectos | proyectoJoin}}</td>
+        <td>
+          <button 
+            title="txtEditar" 
+            pButton 
+            pRipple 
+            icon="pi pi-pencil" 
+            class="p-button-rounded p-button-success p-mr-2"
+            [routerLink]="['/timesheet/cargar-horas', ts.id]"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>

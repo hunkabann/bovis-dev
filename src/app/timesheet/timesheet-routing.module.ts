@@ -9,6 +9,10 @@ const routes: Routes = [
     component: CargarHorasComponent
   },
   {
+    path: 'cargar-horas/:id',
+    component: CargarHorasComponent
+  },
+  {
     path: 'consultar',
     component: ConsultarComponent
   },
