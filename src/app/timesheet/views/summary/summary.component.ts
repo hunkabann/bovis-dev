@@ -37,7 +37,7 @@ export class SummaryComponent implements OnInit {
     this.sharedService.cambiarEstado(true)
     this.timeSheetService.getCatProyectos()
       .subscribe(({data}) => {
-        this.proyectos = data.map(({numProyecto, nombre}) => ({id: numProyecto, nombre }))
+        this.proyectos = data.map(({numProyecto, nombre}) => ({id: numProyecto, nombre, dedicacion: 0 }))
         this.sharedService.cambiarEstado(false)
       })
   }
@@ -66,13 +66,14 @@ export class SummaryComponent implements OnInit {
       .subscribe(({data}) => {
         this.data = data.map(timesheet => ({
           timesheet,
-          participacion: this.proyectos.map(proyecto => {
+          participacion: this.proyectos.map((proyecto, index) => {
 
             const key = timesheet.proyectos.findIndex(({idProyecto}) => idProyecto === proyecto.id)
             let dedicacion = 0
             if(key >= 0) {
               // console.log(timesheet.proyectos[key].tDedicacion)
               dedicacion = timesheet.proyectos[key].tDedicacion
+              this.proyectos[index].dedicacion += dedicacion
             }
             return {
               id:         proyecto.id,
@@ -81,8 +82,7 @@ export class SummaryComponent implements OnInit {
             }
           })
         }))
-
-        // console.log(this.data)
+        console.log(this.proyectos)
       })
   }
 

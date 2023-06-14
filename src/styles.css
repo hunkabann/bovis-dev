@@ -324,3 +324,7 @@ a.article:hover {
 .p-megamenu-panel {
 z-index: 99 !important;
 }
+
+tfoot th {
+  padding: 0.75rem !important;
+}

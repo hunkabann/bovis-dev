@@ -159,6 +159,10 @@ export interface Timesheet {
   dias_trabajo:   number;
   empleado?:      string;
   responsable?:   string;
+  coi_empresa?:   number,
+  noi_empresa?:   number,
+  noi_empleado?:  number,
+  num_empleado?:  number,
   otros:          Otro[];
   proyectos:      Proyecto[];
 }
