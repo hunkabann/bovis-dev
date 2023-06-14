@@ -11,7 +11,7 @@ export class SumaPorcentajesPipe implements PipeTransform {
     proyectos.forEach(proyecto => {
       total += proyecto.tDedicacion
     })
-    return `${total} %`;
+    return `${total}%`;
   }
 
 }
