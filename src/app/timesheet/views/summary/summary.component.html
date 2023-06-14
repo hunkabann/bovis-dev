@@ -1,0 +1,55 @@
+
+<p-toast></p-toast>
+
+<div class="main-container">
+  <div class="grid">
+    <div class="col">
+        <label for="empleado">Fecha:</label>
+        <p-calendar 
+          view="month" 
+          dateFormat="m/yy" 
+          [readonlyInput]="true" 
+          (onSelect)="onSelectFecha($event)"
+          [style]="{width: '100%'}"
+        ></p-calendar>
+    </div>
+  </div>
+
+  <p-table 
+    [value]="data" 
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>0000</th>
+        <th></th>
+        <th>Empleado</th>
+        <th>Responsable</th>
+        <th>{{totalPorcentaje}}%</th>
+        <th *ngFor="let proyecto of proyectos" [pTooltip]="proyecto.nombre">
+          {{proyecto.id}}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-record>
+      <tr>
+        <td>1</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>1</td>
+        <td>{{record.timesheet.empleado}}</td>
+        <td>{{record.timesheet.responsable}}</td>
+        <td>{{record.timesheet.proyectos | sumaPorcentajes}}</td>
+        <td *ngFor="let proyecto of record.participacion">
+          {{proyecto.dedicacion}} %
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

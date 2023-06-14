@@ -8,13 +8,19 @@ import { PrimengModule } from '../shared/primeng.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ProyectoJoinPipe } from './pipes/proyecto-join.pipe';
+import { SummaryComponent } from './views/summary/summary.component';
+import { ModificarComponent } from './views/modificar/modificar.component';
+import { SumaPorcentajesPipe } from './pipes/suma-porcentajes.pipe';
 
 
 @NgModule({
   declarations: [
     CargarHorasComponent,
     ConsultarComponent,
-    ProyectoJoinPipe
+    ProyectoJoinPipe,
+    SummaryComponent,
+    ModificarComponent,
+    SumaPorcentajesPipe
   ],
   imports: [
     CommonModule,

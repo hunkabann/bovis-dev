@@ -43,7 +43,7 @@ export class ConsultarComponent implements AfterViewInit {
       const success = params['success']
 
       if(success) {
-        Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Horas cargadas', detail: 'Las horas han sido cargadas.' }))
+        Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Horas guardadas', detail: 'Las horas han sido guardadas.' }))
       }
     });
   }

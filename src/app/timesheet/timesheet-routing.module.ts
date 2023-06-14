@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CargarHorasComponent } from './views/cargar-horas/cargar-horas.component';
 import { ConsultarComponent } from './views/consultar/consultar.component';
+import { SummaryComponent } from './views/summary/summary.component';
+import { ModificarComponent } from './views/modificar/modificar.component';
 
 const routes: Routes = [
   {
@@ -10,11 +12,15 @@ const routes: Routes = [
   },
   {
     path: 'cargar-horas/:id',
-    component: CargarHorasComponent
+    component: ModificarComponent
   },
   {
     path: 'consultar',
     component: ConsultarComponent
+  },
+  {
+    path: 'summary',
+    component: SummaryComponent
   },
   {
     path: '**',

@@ -92,6 +92,12 @@ export class MenuSidebarComponent implements OnInit {
                   command: () =>
                     this.setModule('Timesheet'.toUpperCase()),
                 },
+                {
+                  label: 'Summary',
+                  routerLink: ['timesheet/summary'],
+                  command: () =>
+                    this.setModule('Timesheet'.toUpperCase()),
+                },
               ],
             },
           ],

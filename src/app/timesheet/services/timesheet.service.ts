@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, map, of } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { CargarHorasResponse, CatEmpleadoResponse, DiasHabilesResponse, EmpleadoInfoResponse, EmpleadoProyectoResponse, SabadosOpciones, TimesheetsPorEmpleadoResponse } from '../models/timesheet.model';
+import { CargarHorasResponse, CatEmpleadoResponse, DiasHabilesResponse, EmpleadoInfoResponse, EmpleadoProyectoResponse, SabadosOpciones, TimesheetPorIdResponse, TimesheetsPorEmpleadoResponse, TimesheetsPorFechaResponse, TsProyectosResponse } from '../models/timesheet.model';
 
 interface Dias {
   habiles:  number,
@@ -35,6 +35,10 @@ export class TimesheetService {
       }))
   }
 
+  getCatProyectos() {
+    return this.http.get<TsProyectosResponse>(`${this.baseUrl}api/pcs/proyectos/`)
+  }
+
   getProyectos(empleadoId: number) {
     return this.http.get<EmpleadoProyectoResponse>(`${this.baseUrl}api/Empleado/Proyectos/${empleadoId}`)
   }
@@ -49,5 +53,17 @@ export class TimesheetService {
 
   getTimeSheetsPorEmpleado(empleadoId: number) {
     return this.http.get<TimesheetsPorEmpleadoResponse>(`${this.baseUrl}api/Timesheet/TimeSheets/Empleado/${empleadoId}`)
+  }
+
+  getTimeSheetPorId(timesheetId: number) {
+    return this.http.get<TimesheetPorIdResponse>(`${this.baseUrl}api/Timesheet/Registro/${timesheetId}`)
+  }
+
+  getTimeSheetsPorFecha(mes: number, anio: number) {
+    return this.http.get<TimesheetsPorFechaResponse>(`${this.baseUrl}api/Timesheet/TimeSheets/Fecha/${mes}/${anio}`)
+  }
+
+  actualizarHoras(body: any) {
+    return this.http.put<CargarHorasResponse>(`${this.baseUrl}api/Timesheet/Registro/Actualizar`, body)
   }
 }
