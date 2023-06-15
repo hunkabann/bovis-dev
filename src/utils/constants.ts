@@ -33,3 +33,7 @@ export const cieHeaders = [
     'TIPO PY',
     'CLASIFICACION PY'
 ]
+
+export const EXCEL_EXTENSION = '.xlsx';
+
+export const PERCENTAGE_FORMAT = '0.00%'

@@ -40,3 +40,17 @@ export interface CieElementPost {
   tipo_py:            string;
   clasificacion_py:   string;
 }
+
+export interface CieProyectosResponse {
+  data:          CieProyecto[];
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface CieProyecto {
+  proyecto:     string;
+  numProyecto:  number;
+  responsable:  string;
+  tipoProyecto: string;
+}

@@ -3,16 +3,14 @@ import * as XLSX from 'xlsx';
 import { CieService } from '../../services/cie.service';
 import { MessageService } from 'primeng/api';
 import { SharedService } from 'src/app/shared/services/shared.service';
-import { CieElementPost } from '../../models/cie.models';
-import { cieHeaders } from 'src/utils/constants';
-import { finalize } from 'rxjs';
+import { CieElementPost, CieProyecto } from '../../models/cie.models';
+import { EXCEL_EXTENSION, cieHeaders } from 'src/utils/constants';
+import { finalize, forkJoin } from 'rxjs';
 
 interface Option {
   name:   string,
   value:  string,
 }
-
-const EXCEL_EXTENSION = '.xlsx';
 
 @Component({
   selector: 'app-carga-sae',
@@ -36,6 +34,10 @@ export class CargaSaeComponent implements OnInit {
   selectedOption: Option
   uploaded = false
   currentFileName: String = ''
+  cuentas: string[] = []
+  proyectos: string[] = []
+
+  proyectosEncontrados: any = {}
 
   constructor() {}
 
@@ -87,11 +89,14 @@ export class CargaSaeComponent implements OnInit {
         if(isMiddleDash || lastRecord) {
           cuentaActual = record.__EMPTY
         } else {
-          if(record.Concepto)
+          if(record.Concepto) {
+            const cuenta = cuentaActual.split(' ')[2]
+            this.cuentas.push(cuenta)
+            this.proyectos.push(record.Proyectos)
             tempNormalRecords.push({
               // ...record, 
               nombre_cuenta:      cuentaActual,
-              cuenta:             cuentaActual.split(' ')[2],
+              cuenta:             cuenta,
               tipo_poliza:        record.__EMPTY,
               numero:             +record.Numero,
               fecha:              record.Fecha,
@@ -104,23 +109,45 @@ export class CargaSaeComponent implements OnInit {
               haber:              record.Haber,
               movimiento:         record.Debe - record.Haber,
               empresa:            this.selectedOption.name.trim(),
-              num_proyecto:       record['Centro de costos'] ? +record['Centro de costos'].split('.')[0] : 0,
-              tipo_num_proyecto:  '-',
-              edo_resultados:     '-',
-              responsable:        '-',
-              tipo_responsable:   '-',
-              tipo_py:            '-',
-              clasificacion_py:   '-'
+              num_proyecto:       null, //record['Centro de costos'] ? +record['Centro de costos'].split('.')[0] : 0,
+              tipo_num_proyecto:  null,
+              edo_resultados:     null,
+              responsable:        null,
+              tipo_responsable:   null,
+              tipo_py:            null,
+              clasificacion_py:   null
             })
+          }
         }
       })
-      this.jsonData = tempNormalRecords
+      
+      forkJoin([
+        this.cieService.getInfoCuentas({data: [...new Set(this.cuentas)]}),
+        this.cieService.getInfoProyectos({data: [...new Set(this.proyectos)]})
+      ])
+      .pipe( finalize(() => this.sharedService.cambiarEstado(false)) )
+      .subscribe(([infoCuentasR, infoProyectosR]) => {
+        console.log(infoCuentasR)
+
+        infoProyectosR.data.forEach(proyecto => {
+          this.proyectosEncontrados[proyecto.proyecto] = {...proyecto}
+        })
+        
+        this.jsonData = tempNormalRecords.map(normalRecord => {
+
+          const keyProyecto = normalRecord.proyectos
+          return {
+            ...normalRecord,
+            num_proyecto:       this.proyectosEncontrados[keyProyecto]?.numProyecto || '-',
+            responsable:        this.proyectosEncontrados[keyProyecto]?.responsable || '-',
+            tipo_num_proyecto:  this.proyectosEncontrados[keyProyecto]?.tipoProyecto || '-'
+          }
+        })
+      })
     }
 
     this.isLoadingFile = false
     this.uploaded = true
-
-    this.sharedService.cambiarEstado(false)
     
     fileUpload.clear();
   }

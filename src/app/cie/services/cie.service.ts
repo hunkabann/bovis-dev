@@ -2,7 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { environment } from 'src/environments/environment';
-import { CieElementPost, CieEmpresasResponse } from '../models/cie.models';
+import { CieElementPost, CieEmpresasResponse, CieProyectosResponse } from '../models/cie.models';
+
+interface StringRequest {
+  data: string[]
+}
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +22,15 @@ export class CieService {
   }
 
   cargarSae(data: CieElementPost[]) {
-    console.log({data})
-    // TODO: ajustar el tipo
     return this.http.post<any>(`${this.baseUrl}api/Cie/Registros/Agregar`, {data})
+  }
+
+  getInfoCuentas(body: StringRequest) {
+    return this.http.post<any>(`${this.baseUrl}api/Cie/Cuentas`, body)
+  }
+
+  getInfoProyectos(body: StringRequest) {
+    return this.http.post<CieProyectosResponse>(`${this.baseUrl}api/Cie/Proyectos`, body)
   }
   
 }
