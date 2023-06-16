@@ -37,3 +37,11 @@ export const cieHeaders = [
 export const EXCEL_EXTENSION = '.xlsx';
 
 export const PERCENTAGE_FORMAT = '0.00%'
+
+export const TITLES = Object.freeze({
+  error:  'Oh no...'
+})
+
+export const SUBJECTS = Object.freeze({
+  error:  'Ha ocurrido un error inesperado.'
+})

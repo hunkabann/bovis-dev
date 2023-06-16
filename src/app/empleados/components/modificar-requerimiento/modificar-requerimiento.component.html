@@ -1,0 +1,216 @@
+
+<p-toast></p-toast>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <div class="main-container">
+    <div class="buttons-container">
+      <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid">Guardar</button>
+    </div>
+  
+    <div class="grid">
+      <div class="col">
+          <label for="categoria">Categoría:</label>
+          <p-dropdown 
+            id="categoria" 
+            [options]="categorias" 
+            (onChange)="null"
+            placeholder="Seleccionar una categoría" 
+            optionLabel="name" 
+            [showClear]="true"
+            [style]="{ width: '100%' }"
+            [ngClass]="{'ng-invalid ng-dirty': esInvalido('categoria')}"
+            formControlName="categoria"
+            optionValue="code"
+          ></p-dropdown>
+          <div *ngIf="esInvalido('categoria')">
+            <small
+              class="error-msg"
+            >
+              {{ obtenerMensajeError('categoria') }}
+            </small>
+          </div>
+      </div>
+      <div class="col">
+        <label for="puesto">Puesto sugerido:</label>
+        <p-dropdown 
+          id="puesto" 
+          [options]="puestos" 
+          (onChange)="null"
+          placeholder="Seleccionar un puesto" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('puesto')}"
+          formControlName="puesto"
+          optionValue="code"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('puesto')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('puesto') }}
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col">
+        <label for="estudios">Nivel de estudios:</label>
+        <p-dropdown 
+          id="estudios" 
+          [options]="nivelEstudios" 
+          (onChange)="null"
+          placeholder="Seleccionar un nivel" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('nivelEstudios')}"
+          formControlName="nivelEstudios"
+          optionValue="code"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('nivelEstudios')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('nivelEstudios') }}
+          </small>
+        </div>
+      </div>
+      <div class="col">
+        <label for="profesion">Profesión:</label>
+        <p-dropdown 
+          id="profesion" 
+          [options]="profesiones" 
+          (onChange)="null"
+          placeholder="Seleccionar una profesión"
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('profesion')}"
+          formControlName="profesion"
+          optionValue="code"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('profesion')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('profesion') }}
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col">
+        <label for="jornada">Jornada:</label>
+        <p-dropdown 
+          id="jornada" 
+          [options]="jornadas" 
+          (onChange)="null"
+          placeholder="Seleccionar una jornada" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('jornada')}"
+          formControlName="jornada"
+          optionValue="code"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('jornada')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('jornada') }}
+          </small>
+        </div>
+      </div>
+      <div class="col">
+        <label for="jornada">Sueldo:</label>
+        <div class="flex justify-content-between gap-3 p-fluid">
+          <div class="flex-auto">
+            <p-inputNumber 
+              inputId="sueldoMin" 
+              locale="es-MX" 
+              mode="decimal" 
+              [minFractionDigits]="2" 
+              [maxFractionDigits]="5"
+              [ngClass]="{'ng-invalid ng-dirty': esInvalido('sueldoMin')}"
+              formControlName="sueldoMin"
+            ></p-inputNumber>
+            <div *ngIf="esInvalido('sueldoMin')">
+              <small
+                class="error-msg"
+              >
+                {{ obtenerMensajeError('sueldoMin') }}
+              </small>
+            </div>
+          </div>
+          <div class="flex-auto">
+            <p-inputNumber 
+              inputId="sueldoMax" 
+              locale="es-MX" 
+              mode="decimal" 
+              [minFractionDigits]="2" 
+              [maxFractionDigits]="5"
+              [ngClass]="{'ng-invalid ng-dirty': esInvalido('sueldoMax')}"
+              formControlName="sueldoMax"
+            ></p-inputNumber>
+            <div *ngIf="esInvalido('sueldoMax')">
+              <small
+                class="error-msg"
+              >
+                {{ obtenerMensajeError('sueldoMax') }}
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col">
+        <label for="habilidades">Habilidades:</label>
+        <div class="flex-auto">
+          <p-multiSelect 
+            [options]="habilidades" 
+            defaultLabel="Seleccionar al menos una habilidad" 
+            optionLabel="name" 
+            display="chip"
+            scrollHeight="250px"
+            [style]="{ width: '100%' }"
+            [ngClass]="{'ng-invalid ng-dirty': esInvalido('habilidades')}"
+            formControlName="habilidades"
+            optionValue="code"
+          ></p-multiSelect>
+          <div *ngIf="esInvalido('habilidades')">
+            <small
+              class="error-msg"
+            >
+              {{ obtenerMensajeError('habilidades') }}
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <label for="experiencias">Experiencias:</label>
+        <div class="flex-auto">
+          <p-multiSelect 
+            [options]="experiencias" 
+            defaultLabel="Seleccionar al menos una experiencia" 
+            optionLabel="name" 
+            display="chip"
+            scrollHeight="250px"
+            [style]="{ width: '100%' }"
+            [ngClass]="{'ng-invalid ng-dirty': esInvalido('experiencias')}"
+            formControlName="experiencias"
+            optionValue="code"
+          ></p-multiSelect>
+          <div *ngIf="esInvalido('experiencias')">
+            <small
+              class="error-msg"
+            >
+              {{ obtenerMensajeError('experiencias') }}
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

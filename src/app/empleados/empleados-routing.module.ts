@@ -5,6 +5,8 @@ import { EmpleadosComponent } from './container/empleados.component';
 import { PersonaRegistroComponent } from './components/persona-registro/persona-registro.component';
 import { EmpleadosPrincipalComponent } from './components/empleados-principal/empleados-principal.component';
 import { GenerarRequerimientoComponent } from './components/generar-requerimiento/generar-requerimiento.component';
+import { RequerimientosComponent } from './components/requerimientos/requerimientos.component';
+import { ModificarRequerimientoComponent } from './components/modificar-requerimiento/modificar-requerimiento.component';
 
 const routes: Routes = [
   { path: 'persona', component: EmpleadosComponent},
@@ -13,7 +15,9 @@ const routes: Routes = [
   { path: 'registro-persona', component: PersonaRegistroComponent},
   { path: 'edicion/:id', component: EmpleadosRegistroComponent},
   { path: 'consulta/:id', component: EmpleadosRegistroComponent},
-  { path: 'generar-requerimiento', component: GenerarRequerimientoComponent}
+  { path: 'generar-requerimiento', component: GenerarRequerimientoComponent},
+  { path: 'modificar-requerimiento/:id', component: ModificarRequerimientoComponent},
+  { path: 'requerimientos', component: RequerimientosComponent}
 ];
 
 @NgModule({

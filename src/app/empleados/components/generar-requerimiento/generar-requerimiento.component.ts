@@ -5,6 +5,7 @@ import { errorsArray } from 'src/utils/constants';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { MessageService } from 'primeng/api';
 import { finalize, forkJoin, map as mapRxjs, map } from 'rxjs';
+import { Router } from '@angular/router';
 
 interface RangoSueldo {
   min: number,
@@ -24,10 +25,11 @@ interface Opcion {
 })
 export class GenerarRequerimientoComponent implements OnInit {
   
-  empleadosService = inject(EmpleadosService)
-  fb = inject(FormBuilder)
-  sharedService = inject(SharedService)
-  messageService = inject(MessageService)
+  empleadosService  = inject(EmpleadosService)
+  fb                = inject(FormBuilder)
+  sharedService     = inject(SharedService)
+  messageService    = inject(MessageService)
+  router            = inject(Router)
 
   form = this.fb.group({
     categoria:      ['', [Validators.required]],
@@ -95,7 +97,7 @@ export class GenerarRequerimientoComponent implements OnInit {
           console.log(data)
           this.form.reset()
           this.sharedService.cambiarEstado(false)
-          this.messageService.add({ severity: 'success', summary: 'Requerimiento generado', detail: 'El requerimiento ha sido generado' })
+          this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}});
         },
         error: (err) => {
           this.sharedService.cambiarEstado(false)

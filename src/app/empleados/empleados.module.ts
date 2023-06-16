@@ -20,6 +20,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
+import { RequerimientosComponent } from './components/requerimientos/requerimientos.component';
+import { TableModule } from 'primeng/table';
+import { ModificarRequerimientoComponent } from './components/modificar-requerimiento/modificar-requerimiento.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,9 @@ import { CheckboxModule } from 'primeng/checkbox';
     EmpleadosRegistroComponent,
     PersonaRegistroComponent,
     EmpleadosPrincipalComponent,
-    GenerarRequerimientoComponent
+    GenerarRequerimientoComponent,
+    RequerimientosComponent,
+    ModificarRequerimientoComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +49,8 @@ import { CheckboxModule } from 'primeng/checkbox';
     InputTextModule,
     MultiSelectModule,
     InputNumberModule,
-    CheckboxModule
+    CheckboxModule,
+    TableModule
   ],
   exports:[
 

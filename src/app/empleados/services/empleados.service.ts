@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { CatEmpleado, CatPersona, CatalogoResponse, Persona, GenerarRequerimientoResponse } from '../Models/empleados';
+import { CatEmpleado, CatPersona, CatalogoResponse, Persona, GenerarRequerimientoResponse, RequerimientosResponse, RequerimientoResponse, ActualizarRequerimientoResponse } from '../Models/empleados';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -121,6 +121,18 @@ export class EmpleadosService {
 
   generarRequerimiento(body: any) {
     return this.http.post<GenerarRequerimientoResponse>(`${this.baseUrl}api/Requerimiento/Registro/Agregar`, body)
+  }
+
+  getRequerimientos() {
+    return this.http.get<RequerimientosResponse>(`${this.baseUrl}api/Requerimiento/Requerimientos/true`)
+  }
+
+  getRequerimiento(id: number) {
+    return this.http.get<RequerimientoResponse>(`${this.baseUrl}api/Requerimiento/Registro/${id}`)
+  }
+
+  actualizarRequerimiento(body: any) {
+    return this.http.put<ActualizarRequerimientoResponse>(`${this.baseUrl}api/Requerimiento/Registro/Actualizar`, body)
   }
 
   // ./ Hecho por sebastian.flores

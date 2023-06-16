@@ -132,3 +132,38 @@ export interface GenerarRequerimientoResponse {
   message:       null;
   transactionId: null;
 }
+
+export interface ActualizarRequerimientoResponse {
+  data:          null;
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface RequerimientosResponse {
+  data:          Requerimiento[];
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface RequerimientoResponse {
+  data:          Requerimiento;
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface Requerimiento {
+  nukidrequerimiento:  number;
+  nukidcategoria:      number;
+  nukidpuesto:         number;
+  nukidnivel_estudios: number;
+  nukidprofesion:      number;
+  nukidjornada:        number;
+  nusueldo_min:        number;
+  nusueldo_max:        number;
+  chhabilidades:       null;
+  chexperiencias:      null;
+  boactivo:            boolean;
+}

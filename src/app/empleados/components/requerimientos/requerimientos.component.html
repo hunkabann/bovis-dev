@@ -1,0 +1,46 @@
+
+<p-toast></p-toast>
+
+
+<div class="main-container">
+  <p-table 
+    [value]="data" 
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [paginator]="true"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [rows]="10"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th [style]="{opacity: 0.8}"></th>
+        <th colspan="2">Sueldo</th>
+        <th [style]="{opacity: 0.8}"></th>
+      </tr>
+      <tr>
+        <th>Num.</th>
+        <th>Min</th>
+        <th>Max</th>
+        <th class="text-center">Opciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-record let-i="rowIndex">
+      <tr>
+        <td>{{i + 1}}</td>
+        <td>{{record.nusueldo_min | currency}}</td>
+        <td>{{record.nusueldo_max | currency}}</td>
+        <td class="d-flex justify-content-center">
+          <button 
+            title="Modificar requerimiento" 
+            pButton 
+            pRipple 
+            icon="pi pi-pencil" 
+            class="p-button-rounded p-button-success p-mr-2"
+            [routerLink]="['/empleados/modificar-requerimiento', record.nukidrequerimiento]"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
