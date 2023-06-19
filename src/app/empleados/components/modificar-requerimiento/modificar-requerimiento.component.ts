@@ -33,8 +33,8 @@ export class ModificarRequerimientoComponent implements OnInit {
     jornada:          ['', [Validators.required]],
     sueldoMin:        ['', [Validators.required]],
     sueldoMax:        ['', [Validators.required]],
-    habilidades:      ['', [Validators.required]],
-    experiencias:     ['', [Validators.required]],
+    habilidades:      [[''], [Validators.required]],
+    experiencias:     [[''], [Validators.required]],
   })
   
   categorias:     Opcion[] = []
@@ -80,6 +80,9 @@ export class ModificarRequerimientoComponent implements OnInit {
               this.experiencias = experienciasR.data.map(experiencia => ({name: experiencia.descripcion, code: experiencia.id.toString()}))
               this.profesiones = profesionesR.data.map(profesion => ({name: profesion.descripcion, code: profesion.id.toString()}))
 
+              const habilidades = requerimiento.habilidades.map(habilidad => habilidad.idHabilidad.toString())
+              const experiencias = requerimiento.experiencias.map(experiencia => experiencia.idExperiencia.toString())
+
               this.form.patchValue({
                 sueldoMin:      requerimiento.nusueldo_min.toString(),
                 sueldoMax:      requerimiento.nusueldo_max.toString(),
@@ -87,7 +90,9 @@ export class ModificarRequerimientoComponent implements OnInit {
                 puesto:         requerimiento.nukidpuesto.toString(),
                 nivelEstudios:  requerimiento.nukidnivel_estudios.toString(),
                 profesion:      requerimiento.nukidprofesion.toString(),
-                jornada:        requerimiento.nukidjornada.toString()
+                jornada:        requerimiento.nukidjornada.toString(),
+                habilidades,
+                experiencias
               })
             })
           },

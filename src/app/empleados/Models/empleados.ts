@@ -157,13 +157,29 @@ export interface RequerimientoResponse {
 export interface Requerimiento {
   nukidrequerimiento:  number;
   nukidcategoria:      number;
+  chcategoria:         string;
   nukidpuesto:         number;
+  chpuesto:            string;
   nukidnivel_estudios: number;
+  chnivel_estudios:    string;
   nukidprofesion:      number;
+  chprofesion:         string;
   nukidjornada:        number;
+  chjornada:           string;
   nusueldo_min:        number;
   nusueldo_max:        number;
-  chhabilidades:       null;
-  chexperiencias:      null;
-  boactivo:            boolean;
+  habilidades:         Habilidad[];
+  experiencias:        Experiencia[];
+}
+
+interface Experiencia {
+  idRequerimiento: number;
+  idExperiencia:   number;
+  activo:          boolean;
+}
+
+interface Habilidad {
+  idRequerimiento: number;
+  idHabilidad:     number;
+  activo:          boolean;
 }

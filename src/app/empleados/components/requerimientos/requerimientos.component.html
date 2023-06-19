@@ -14,12 +14,23 @@
   >
     <ng-template pTemplate="header">
       <tr>
-        <th [style]="{opacity: 0.8}"></th>
+        <th 
+          [style]="{opacity: 0.8}"
+          colspan="6"
+        ></th>
         <th colspan="2">Sueldo</th>
-        <th [style]="{opacity: 0.8}"></th>
+        <th 
+          [style]="{opacity: 0.8}"
+          colspan="3"
+        ></th>
       </tr>
       <tr>
         <th>Num.</th>
+        <th>Categoría</th>
+        <th>Puesto</th>
+        <th>Nivel de estudios</th>
+        <th>Profesión</th>
+        <th>Jornada</th>
         <th>Min</th>
         <th>Max</th>
         <th class="text-center">Opciones</th>
@@ -28,6 +39,11 @@
     <ng-template pTemplate="body" let-record let-i="rowIndex">
       <tr>
         <td>{{i + 1}}</td>
+        <td>{{record.chcategoria}}</td>
+        <td>{{record.chpuesto}}</td>
+        <td>{{record.chnivel_estudios}}</td>
+        <td>{{record.chprofesion}}</td>
+        <td>{{record.chjornada}}</td>
         <td>{{record.nusueldo_min | currency}}</td>
         <td>{{record.nusueldo_max | currency}}</td>
         <td class="d-flex justify-content-center">
